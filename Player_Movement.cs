@@ -44,6 +44,7 @@ public class Player_Movement : MonoBehaviour
         rb.freezeRotation = true;
         rb.useGravity = false;
     }
+    
 
     private void MyInput()
     {
