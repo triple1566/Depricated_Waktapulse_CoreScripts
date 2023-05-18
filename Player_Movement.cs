@@ -29,7 +29,7 @@ public class Player_Movement : MonoBehaviour
     float horInput;
     float vertInput;
 
-    public float jumpforce;
+    public float jumpforce = 20f;
     public float jumpcooldown;
     public float airmultiplier;
     bool readytojump;
