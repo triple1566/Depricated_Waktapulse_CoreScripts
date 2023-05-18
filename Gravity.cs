@@ -33,10 +33,9 @@ public class Gravity : MonoBehaviour
         else
         {
             playerVelocity.y+=downForce/1000;
-            //중력에 따라 아래로 움직이기->
         }
         rb.AddForce(-transform.up*playerVelocity.y, ForceMode.Impulse);
-
+        //중력에 따라 아래로 움직이기
 
     }
 }
