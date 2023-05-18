@@ -5,7 +5,7 @@ using UnityEngine;
 public class Gravity : MonoBehaviour
 {
     private CharacterController controller;
-    public float downForce = 1f;
+    public float downForce = 1.96f;
     private Vector3 playerVelocity;
     public LayerMask ground;
     bool grounded;

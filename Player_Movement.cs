@@ -74,6 +74,7 @@ public class Player_Movement : MonoBehaviour
 
 
         if (grounded&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey)))
+            
             rb.drag = groundDrag;
         else if(grounded)
             rb.drag = slideDrag;
