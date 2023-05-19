@@ -13,6 +13,7 @@ public class Player_Movement : MonoBehaviour
     public KeyCode backwardKey = KeyCode.S;
     public KeyCode rightKey = KeyCode.D;
     public KeyCode leftKey = KeyCode.A;
+    public KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Movement Variables")]
     public float moveSpeed;
@@ -34,6 +35,12 @@ public class Player_Movement : MonoBehaviour
     public float airmultiplier;
     bool readytojump;
 
+    [Header("Crouch Variables")]
+
+    public float startYscale;
+    public float crouchYscale;
+    public float crouchForce;
+
     Vector3 moveDirection;
 
     Rigidbody rb;
@@ -43,17 +50,24 @@ public class Player_Movement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         rb.useGravity = false;
+        startYscale = transform.localScale.y;
     }
-    
+
 
     private void MyInput()
     {
         horInput = Input.GetAxisRaw("Horizontal");
         vertInput = Input.GetAxisRaw("Vertical");
-        if(readytojump&&grounded&&Input.GetKey(jumpKey))
+        if(readytojump&&grounded&&(Input.GetKey(jumpKey)||(Input.GetKey(jumpKey)&&Input.GetKey(crouchKey))))
             Jump();
             readytojump = false;
             Invoke(nameof(ResetJump), jumpcooldown);
+        if(grounded&&Input.GetKey(crouchKey)){
+            Crouch();
+        }
+        else{
+            UndoCrouch();
+        }
         
     }
 
@@ -75,7 +89,6 @@ public class Player_Movement : MonoBehaviour
 
 
         if (grounded&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey)))
-            
             rb.drag = groundDrag;
         else if(grounded)
             rb.drag = slideDrag;
@@ -102,10 +115,21 @@ public class Player_Movement : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up*jumpforce, ForceMode.Impulse);
-
     }
 
     private void ResetJump(){
         readytojump = true;
+    }
+    //웅크리기
+    private void Crouch(){
+        rb.constraints = RigidbodyConstraints.FreezePositionZ;
+        rb.constraints = RigidbodyConstraints.FreezePositionX;
+        transform.localScale = new Vector3(transform.localScale.x, crouchYscale, transform.localScale.z);
+        rb.AddForce(-transform.up*crouchForce, ForceMode.Impulse);
+    }
+    private void UndoCrouch(){
+        rb.constraints = RigidbodyConstraints.None;
+        rb.freezeRotation = true;
+        transform.localScale = new Vector3(transform.localScale.x, startYscale, transform.localScale.z);
     }
 }
