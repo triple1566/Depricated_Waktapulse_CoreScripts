@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Gravity : MonoBehaviour
 {
-    private CharacterController controller;
     public float downForce = 1.96f;
     private Vector3 playerVelocity;
     public LayerMask ground;
@@ -19,7 +18,6 @@ public class Gravity : MonoBehaviour
     {
         
         rb = GetComponent<Rigidbody>();
-        controller = gameObject.AddComponent<CharacterController>();
     }
 
     // Update is called once per frame
