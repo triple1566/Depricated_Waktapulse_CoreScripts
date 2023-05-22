@@ -17,6 +17,7 @@ public class Player_Movement : MonoBehaviour
 
     [Header("Movement Variables")]
     public float moveSpeed;
+    public float mass;
 
     public float groundDrag;
     public float slideDrag;
@@ -52,6 +53,7 @@ public class Player_Movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        rb.mass = mass;
         rb.useGravity = false;
         startYscale = transform.localScale.y;
     }
