@@ -16,9 +16,6 @@ public class GunfireBasic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.L)) {
-            GameObject obj = GameObject.Find("CameraAt");
-            transform.LookAt(obj.transform);
-        }
+        
     }
 }
