@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,38 +15,37 @@ public class Player_Movement : MonoBehaviour
     public KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Movement Variables")]
-    public float moveSpeed;
-    public float mass;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float mass;
 
-    public float groundDrag;
-    public float slideDrag;
+    [SerializeField] private float groundDrag;
+    [SerializeField] private float slideDrag;
 
-    public float playerHeight;
-    public LayerMask ground;
+    [SerializeField] private float playerHeight;
+    [SerializeField] private LayerMask ground;
     bool grounded;
 
-    public Transform orientation;
+    [SerializeField] private Transform orientation;
 
     float horInput;
     float vertInput;
 
-    public float jumpforce = 20f;
-    public float jumpcooldown;
-    public float airmultiplier;
+    [SerializeField] private float jumpforce = 20f;
+    [SerializeField] private float jumpcooldown;
+    [SerializeField] private float airmultiplier;
     bool readytojump;
 
     [Header("Crouch Variables")]
 
-    public float startYscale;
-    public float crouchYscale;
-    public float crouchForce;
+    [SerializeField] private float startYscale;
+    [SerializeField] private float crouchYscale;
+    [SerializeField] private float crouchForce;
     private bool crouched;
 
     Vector3 moveDirection;
 
     Rigidbody rb;
-    public Rigidbody bodyRigidbody;
-    public Rigidbody headRigidbody;
+    [SerializeField] private Rigidbody bodyRigidbody;
 
     private void Start()
     {
@@ -67,6 +65,9 @@ public class Player_Movement : MonoBehaviour
             Jump();
             readytojump = false;
             Invoke(nameof(ResetJump), jumpcooldown);
+        
+        //crouch functions
+        /*
         if(grounded&&Input.GetKey(crouchKey))
         {
             Crouch();
@@ -75,7 +76,7 @@ public class Player_Movement : MonoBehaviour
         {
             UndoCrouch();
         }
-        
+        */
     }
 
     private void MovePlayer()
@@ -91,17 +92,20 @@ public class Player_Movement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, ground);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight+0.1f, ground);
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down)*playerHeight, Color.green);
         MyInput();
 
-
         if (grounded&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey)))
             rb.drag = groundDrag;
-        else if(grounded)
+        else if(grounded){
+            Debug.Log("grounded");
             rb.drag = slideDrag;
-        else
+        }
+        else{
+            Debug.Log("Drag is 0");
             rb.drag = 0;
+        }
     }
     private void FixedUpdate() 
     {
@@ -129,16 +133,13 @@ public class Player_Movement : MonoBehaviour
         readytojump = true;
     }
     //웅크리기
-    private void Crouch(){
+    /*private void Crouch(){
         bodyRigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
         bodyRigidbody.constraints = RigidbodyConstraints.FreezePositionX;
         bodyRigidbody.freezeRotation = true;
         rb.constraints = RigidbodyConstraints.FreezePositionZ;
         rb.constraints = RigidbodyConstraints.FreezePositionX;
         rb.freezeRotation = true;
-        headRigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
-        headRigidbody.constraints = RigidbodyConstraints.FreezePositionX;
-        headRigidbody.freezeRotation = true;
         transform.localScale = new Vector3(transform.localScale.x, crouchYscale, transform.localScale.z);
         rb.AddForce(-transform.up*crouchForce, ForceMode.Impulse);
         crouched = true;
@@ -146,12 +147,10 @@ public class Player_Movement : MonoBehaviour
     private void UndoCrouch(){
         bodyRigidbody.constraints = RigidbodyConstraints.None;
         rb.constraints = RigidbodyConstraints.None;
-        headRigidbody.constraints = RigidbodyConstraints.None;
-        headRigidbody.freezeRotation = false;
         bodyRigidbody.freezeRotation = false;
         rb.freezeRotation = true;
         rb.AddForce(transform.up*crouchForce, ForceMode.Impulse);
         transform.localScale = new Vector3(transform.localScale.x, startYscale, transform.localScale.z);
         crouched = false;
-    }
+    }*/
 }

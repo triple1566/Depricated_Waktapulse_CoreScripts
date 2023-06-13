@@ -16,16 +16,18 @@ public class Gravity : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        
         rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     private void Update()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight*0.5f+0.2f, ground);
+        //Debug.Log(playerVelocity.y);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight+0.2f, ground);
+        //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down)*playerHeight, Color.green);
     
         if(grounded){
+            Debug.Log("grounded by gravity");
             playerVelocity.y = 0f;
         }
         else
