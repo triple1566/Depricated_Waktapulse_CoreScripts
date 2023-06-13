@@ -8,6 +8,7 @@ public class Player_Movement : MonoBehaviour
 
     [Header("KeySettings")]
     public KeyCode jumpKey = KeyCode.Space;
+    public KeyCode SprintKey = KeyCode.LeftShift;
     public KeyCode forwardKey = KeyCode.W;
     public KeyCode backwardKey = KeyCode.S;
     public KeyCode rightKey = KeyCode.D;
@@ -15,6 +16,8 @@ public class Player_Movement : MonoBehaviour
     public KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Movement Variables")]
+    private float sprintMultiplier;
+    [SerializeField] private float sprintVal;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float mass;
 
@@ -84,15 +87,20 @@ public class Player_Movement : MonoBehaviour
     {
         moveDirection = orientation.forward*vertInput+orientation.right*horInput;   
         if(grounded){
-            rb.AddForce(moveDirection.normalized*moveSpeed*10f, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized*sprintMultiplier*moveSpeed*10f, ForceMode.Force);
         }
         else if(!grounded)
-            rb.AddForce(moveDirection.normalized*moveSpeed*10f*airmultiplier, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized*sprintMultiplier*moveSpeed*10f*airmultiplier, ForceMode.Force);
     }
 
     // Update is called once per frame
     private void Update()
     {
+        if(Input.GetKey(SprintKey)){
+            sprintMultiplier = sprintVal;
+        }
+        else
+            sprintMultiplier = 1.0f;
         //Debug.Log(readytojump);
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight+0.01f, ground);
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down)*playerHeight, Color.green);
