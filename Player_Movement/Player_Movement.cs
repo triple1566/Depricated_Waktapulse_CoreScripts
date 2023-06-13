@@ -33,7 +33,7 @@ public class Player_Movement : MonoBehaviour
     [SerializeField] private float jumpforce = 20f;
     [SerializeField] private float jumpcooldown;
     [SerializeField] private float airmultiplier;
-    bool readytojump;
+    bool readytojump = true;
 
     [Header("Crouch Variables")]
 
@@ -61,10 +61,11 @@ public class Player_Movement : MonoBehaviour
     {
         horInput = Input.GetAxisRaw("Horizontal");
         vertInput = Input.GetAxisRaw("Vertical");
-        if(readytojump&&grounded&&(Input.GetKey(jumpKey)||(Input.GetKey(jumpKey)&&Input.GetKey(crouchKey))))
+        if(readytojump&&grounded&&(Input.GetKey(jumpKey)||(Input.GetKey(jumpKey)&&Input.GetKey(crouchKey)))){
             Jump();
             readytojump = false;
             Invoke(nameof(ResetJump), jumpcooldown);
+        }
         
         //crouch functions
         /*
@@ -92,18 +93,23 @@ public class Player_Movement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight+0.1f, ground);
+        //Debug.Log(readytojump);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight+0.01f, ground);
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down)*playerHeight, Color.green);
         MyInput();
 
-        if (grounded&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey)))
+        if (grounded&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey))){
+            //readytojump = true;
             rb.drag = groundDrag;
+        }
         else if(grounded){
-            Debug.Log("grounded");
+            //Debug.Log("grounded");
+            //readytojump = true;
             rb.drag = slideDrag;
         }
         else{
-            Debug.Log("Drag is 0");
+            //Debug.Log("Drag is 0");
+            //readytojump = false;
             rb.drag = 0;
         }
     }

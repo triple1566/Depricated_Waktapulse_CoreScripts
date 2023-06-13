@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Gravity : MonoBehaviour
 {
-    public float downForce = 1.96f;
+    [SerializeField] private float downForce = 1.96f;
     private Vector3 playerVelocity;
-    public LayerMask ground;
+    [SerializeField] private LayerMask ground;
     bool grounded;
     Vector3 moveDirection;
-    public float playerHeight;
+    [SerializeField] private float playerHeight;
     Rigidbody rb;
 
 
@@ -27,7 +27,7 @@ public class Gravity : MonoBehaviour
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down)*playerHeight, Color.green);
     
         if(grounded){
-            Debug.Log("grounded by gravity");
+            //Debug.Log("grounded by gravity");
             playerVelocity.y = 0f;
         }
         else
