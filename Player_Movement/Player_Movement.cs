@@ -34,11 +34,11 @@ public class Player_Movement : MonoBehaviour
     float vertInput;
 
     [SerializeField] private float jumpforce;
-    [SerializeField] private float slopeEscapeVal;
     [SerializeField] private float jumpcooldown;
     [SerializeField] private float airmultiplier;
     bool readytojump = true;
     [Header("Slope Handling")]
+    [SerializeField] private float slopeJumpMultiplier;
     [SerializeField] private float maxSlopeAngle;
     [SerializeField] private RaycastHit slopeHit;
 
@@ -82,16 +82,17 @@ public class Player_Movement : MonoBehaviour
         vertInput = Input.GetAxisRaw("Vertical");
         if(readytojump&&OnSlope()&&(Input.GetKey(jumpKey)||(Input.GetKey(jumpKey)&&Input.GetKey(crouchKey)))&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey)))
         {
-            Debug.Log("PureSlopeJump");
+            //Debug.Log("PureSlopeJump");
             //EscapeSlope();
+            EscapeSlope();
             Jump();
             readytojump = false;
             Invoke(nameof(ResetJump), jumpcooldown);
         }
         else if(readytojump&&grounded&&(Input.GetKey(jumpKey)||(Input.GetKey(jumpKey)&&Input.GetKey(crouchKey)))&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey)))
         {
-            Debug.Log("PureSlopeJump");
-            PureJump();
+            //Debug.Log("PureGroundJump");
+            Jump();
             Jump();
             readytojump = false;
             Invoke(nameof(ResetJump), jumpcooldown);
@@ -114,14 +115,9 @@ public class Player_Movement : MonoBehaviour
         }
         */
     }
-
-    private void PureJump()
-    {
-        rb.AddForce(transform.up * jumpforce, ForceMode.Impulse);
-    }
     private void EscapeSlope()
     {
-        rb.AddForce(GetSlopeDirection() * jumpforce, ForceMode.Impulse);
+        rb.AddForce(transform.up*slopeJumpMultiplier, ForceMode.Impulse);
     }
 
     private void MovePlayer()
@@ -130,6 +126,7 @@ public class Player_Movement : MonoBehaviour
         if(OnSlope()){
             Debug.Log("On Slope");
             rb.AddForce(GetSlopeDirection()*sprintMultiplier*moveSpeed*10f, ForceMode.Force);
+            
         }  
         if(grounded){
             rb.AddForce(moveDirection.normalized*sprintMultiplier*moveSpeed*10f, ForceMode.Force);
@@ -218,3 +215,7 @@ public class Player_Movement : MonoBehaviour
         crouched = false;
     }*/
 }
+
+
+
+//ToDO: Fix Bumping up and down when moving on a slope
