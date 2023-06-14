@@ -11,6 +11,7 @@ public class GunfireBasic : MonoBehaviour
     [SerializeField] private LayerMask enemy;
     [SerializeField] private float MaxHitDistance;
     public KeyCode WeaponFireKey = KeyCode.Mouse0;
+    public Transform rayOrientation;
     private bool hit;
 
 
@@ -23,7 +24,7 @@ public class GunfireBasic : MonoBehaviour
 
     void Update()
     {
-        hit = Physics.Raycast(transform.position, Vector3.forward, MaxHitDistance, enemy);
+        hit = Physics.Raycast(transform.position, rayOrientation.TransformDirection(Vector3.forward), MaxHitDistance, enemy);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward)*MaxHitDistance, Color.red);
 
         if(hit&&Input.GetKey(WeaponFireKey)){

@@ -11,10 +11,10 @@ public class Camera_Movement : MonoBehaviour
     public float sens_x = 500;
     public float sens_y = 500;
 
-    public Transform orientation;
+    [SerializeField] private Transform orientation;
 
-    float xRot;
-    float yRot;
+    [SerializeField] private float xRot;
+    [SerializeField] private float yRot;
 
 
     private void Start()
