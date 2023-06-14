@@ -27,7 +27,7 @@ public class Gravity : MonoBehaviour
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down)*playerHeight, Color.green);
     
         if(grounded){
-            Debug.Log("grounded by gravity");
+            //Debug.Log("grounded by gravity");
             playerVelocity.y = 0f;
         }
         else

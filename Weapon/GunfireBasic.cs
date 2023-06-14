@@ -13,12 +13,13 @@ public class GunfireBasic : MonoBehaviour
     public KeyCode WeaponFireKey = KeyCode.Mouse0;
     public Transform rayOrientation;
     private bool hit;
+    private bool readyToFire;
 
 
 
     void Start()
     {
-        
+        readyToFire = false;
     }
 
 
@@ -27,11 +28,25 @@ public class GunfireBasic : MonoBehaviour
         hit = Physics.Raycast(transform.position, rayOrientation.TransformDirection(Vector3.forward), MaxHitDistance, enemy);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward)*MaxHitDistance, Color.red);
 
-        if(hit&&Input.GetKey(WeaponFireKey)){
-            Debug.Log("Hit something");
+        if(Input.GetKey(WeaponFireKey)){
+            if(hit){
+                //aimed and fired
+                Debug.Log("hit!");
+            }
+            else{
+                //not aimed but fired
+                Debug.Log("Missed");
+            }
         }
-        else if(hit){
-            Debug.Log("Aimed At");
+        else{
+            if(hit){
+                //aimed but not fired
+                Debug.Log("Aimed");
+            }
+            else{
+                //not aimed and not fired
+                Debug.Log("Not Aimed");
+            }
         }
     }
 }
