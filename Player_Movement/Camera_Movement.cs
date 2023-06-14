@@ -13,8 +13,8 @@ public class Camera_Movement : MonoBehaviour
 
     [SerializeField] private Transform orientation;
 
-    [SerializeField] private float xRot;
-    [SerializeField] private float yRot;
+    private float xRot;
+    private float yRot;
 
 
     private void Start()
@@ -24,7 +24,7 @@ public class Camera_Movement : MonoBehaviour
     }
 
     // Update is called once per frames
-    void Update()
+    private  Update()
     {
         float mouseX = Input.GetAxisRaw("Mouse X")*Time.deltaTime * sens_x;
         float mouseY = Input.GetAxisRaw("Mouse Y")*Time.deltaTime * sens_y;

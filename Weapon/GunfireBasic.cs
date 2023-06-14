@@ -18,17 +18,17 @@ public class GunfireBasic : MonoBehaviour
 
 
 
-    void ResetReadyToFire(){
+    private void ResetReadyToFire(){
         readyToFire = true;
     }
 
-    void Start()
+    private void Start()
     {
         readyToFire = true;
     }
 
 
-    void Update()
+    private void Update()
     {
         hit = Physics.Raycast(transform.position, rayOrientation.TransformDirection(Vector3.forward), MaxHitDistance, enemy);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward)*MaxHitDistance, Color.red);
