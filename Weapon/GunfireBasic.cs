@@ -7,15 +7,30 @@ using UnityEngine;
 
 public class GunfireBasic : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    [SerializeField] private LayerMask enemy;
+    [SerializeField] private float MaxHitDistance;
+    public KeyCode WeaponFireKey = KeyCode.Mouse0;
+    private bool hit;
+
+
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        
+        hit = Physics.Raycast(transform.position, Vector3.forward, MaxHitDistance, enemy);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward)*MaxHitDistance, Color.red);
+
+        if(hit&&Input.GetKey(WeaponFireKey)){
+            Debug.Log("Hit something");
+        }
+        else if(hit){
+            Debug.Log("Aimed At");
+        }
     }
 }

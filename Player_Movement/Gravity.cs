@@ -7,7 +7,7 @@ public class Gravity : MonoBehaviour
     [SerializeField] private float downForce = 1.96f;
     private Vector3 playerVelocity;
     [SerializeField] private LayerMask ground;
-    bool grounded;
+    private bool grounded;
     Vector3 moveDirection;
     [SerializeField] private float playerHeight;
     Rigidbody rb;
@@ -27,7 +27,7 @@ public class Gravity : MonoBehaviour
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down)*playerHeight, Color.green);
     
         if(grounded){
-            //Debug.Log("grounded by gravity");
+            Debug.Log("grounded by gravity");
             playerVelocity.y = 0f;
         }
         else
