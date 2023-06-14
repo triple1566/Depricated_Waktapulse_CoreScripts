@@ -10,6 +10,7 @@ public class GunfireBasic : MonoBehaviour
 
     [SerializeField] private LayerMask enemy;
     [SerializeField] private float MaxHitDistance;
+    [SerializeField] private float fireRateCooltime;
     public KeyCode WeaponFireKey = KeyCode.Mouse0;
     public Transform rayOrientation;
     private bool hit;
@@ -17,9 +18,13 @@ public class GunfireBasic : MonoBehaviour
 
 
 
+    void ResetReadyToFire(){
+        readyToFire = true;
+    }
+
     void Start()
     {
-        readyToFire = false;
+        readyToFire = true;
     }
 
 
@@ -28,7 +33,7 @@ public class GunfireBasic : MonoBehaviour
         hit = Physics.Raycast(transform.position, rayOrientation.TransformDirection(Vector3.forward), MaxHitDistance, enemy);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward)*MaxHitDistance, Color.red);
 
-        if(Input.GetKey(WeaponFireKey)){
+        if(readyToFire&&Input.GetKey(WeaponFireKey)){
             if(hit){
                 //aimed and fired
                 Debug.Log("hit!");
@@ -37,6 +42,8 @@ public class GunfireBasic : MonoBehaviour
                 //not aimed but fired
                 Debug.Log("Missed");
             }
+            readyToFire=false;
+            Invoke(nameof(ResetReadyToFire), fireRateCooltime);
         }
         else{
             if(hit){
