@@ -33,10 +33,14 @@ public class Player_Movement : MonoBehaviour
     float horInput;
     float vertInput;
 
-    [SerializeField] private float jumpforce = 20f;
+    [SerializeField] private float jumpforce;
+    [SerializeField] private float slopeEscapeVal;
     [SerializeField] private float jumpcooldown;
     [SerializeField] private float airmultiplier;
     bool readytojump = true;
+    [Header("Slope Handling")]
+    [SerializeField] private float maxSlopeAngle;
+    [SerializeField] private RaycastHit slopeHit;
 
     [Header("Crouch Variables")]
 
@@ -49,6 +53,18 @@ public class Player_Movement : MonoBehaviour
 
     Rigidbody rb;
     [SerializeField] private Rigidbody bodyRigidbody;
+
+    private bool OnSlope(){
+        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit,playerHeight+0.1f, ground)){
+            float slopeAngle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return slopeAngle<maxSlopeAngle&&slopeAngle!=0;
+        }
+        return false;
+    }
+
+    private Vector3 GetSlopeDirection(){
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal);
+    }
 
     private void Start()
     {
@@ -64,7 +80,23 @@ public class Player_Movement : MonoBehaviour
     {
         horInput = Input.GetAxisRaw("Horizontal");
         vertInput = Input.GetAxisRaw("Vertical");
-        if(readytojump&&grounded&&(Input.GetKey(jumpKey)||(Input.GetKey(jumpKey)&&Input.GetKey(crouchKey)))){
+        if(readytojump&&OnSlope()&&(Input.GetKey(jumpKey)||(Input.GetKey(jumpKey)&&Input.GetKey(crouchKey)))&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey)))
+        {
+            Debug.Log("PureSlopeJump");
+            //EscapeSlope();
+            Jump();
+            readytojump = false;
+            Invoke(nameof(ResetJump), jumpcooldown);
+        }
+        else if(readytojump&&grounded&&(Input.GetKey(jumpKey)||(Input.GetKey(jumpKey)&&Input.GetKey(crouchKey)))&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey)))
+        {
+            Debug.Log("PureSlopeJump");
+            PureJump();
+            Jump();
+            readytojump = false;
+            Invoke(nameof(ResetJump), jumpcooldown);
+        }
+        else if(readytojump&&(OnSlope()||grounded)&&(Input.GetKey(jumpKey)||(Input.GetKey(jumpKey)&&Input.GetKey(crouchKey)))){
             Jump();
             readytojump = false;
             Invoke(nameof(ResetJump), jumpcooldown);
@@ -83,9 +115,22 @@ public class Player_Movement : MonoBehaviour
         */
     }
 
+    private void PureJump()
+    {
+        rb.AddForce(transform.up * jumpforce, ForceMode.Impulse);
+    }
+    private void EscapeSlope()
+    {
+        rb.AddForce(GetSlopeDirection() * jumpforce, ForceMode.Impulse);
+    }
+
     private void MovePlayer()
     {
-        moveDirection = orientation.forward*vertInput+orientation.right*horInput;   
+        moveDirection = orientation.forward*vertInput+orientation.right*horInput;
+        if(OnSlope()){
+            Debug.Log("On Slope");
+            rb.AddForce(GetSlopeDirection()*sprintMultiplier*moveSpeed*10f, ForceMode.Force);
+        }  
         if(grounded){
             rb.AddForce(moveDirection.normalized*sprintMultiplier*moveSpeed*10f, ForceMode.Force);
         }
@@ -96,6 +141,7 @@ public class Player_Movement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        Debug.Log(jumpforce);
         if(Input.GetKey(SprintKey)){
             sprintMultiplier = sprintVal;
         }
@@ -106,18 +152,16 @@ public class Player_Movement : MonoBehaviour
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down)*playerHeight, Color.green);
         MyInput();
 
-        if (grounded&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey))){
-            //readytojump = true;
+        if ((OnSlope()||grounded)&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey))){
+            Debug.Log("grounded");
             rb.drag = groundDrag;
         }
-        else if(grounded){
-            //Debug.Log("grounded");
-            //readytojump = true;
+        else if(OnSlope()||grounded){
+            Debug.Log("grounded");
             rb.drag = slideDrag;
         }
         else{
-            //Debug.Log("Drag is 0");
-            //readytojump = false;
+            Debug.Log("Drag is 0");
             rb.drag = 0;
         }
     }
@@ -127,19 +171,25 @@ public class Player_Movement : MonoBehaviour
     }
     private void SpeedControl()
     {
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        if(OnSlope()){
+            if(rb.velocity.magnitude>moveSpeed){
+                rb.velocity = rb.velocity.normalized*moveSpeed;
+            }
+        }
+        else{
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        if(flatVel.magnitude > moveSpeed)
-        {
-            Vector3 limitedVel = flatVel.normalized * moveSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z); 
+            if(flatVel.magnitude > moveSpeed)
+            {
+                Vector3 limitedVel = flatVel.normalized * moveSpeed;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z); 
+            }
         }
     }
 
     private void Jump(){
-
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
+        
         rb.AddForce(transform.up*jumpforce, ForceMode.Impulse);
     }
 
