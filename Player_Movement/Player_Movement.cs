@@ -38,7 +38,7 @@ public class Player_Movement : MonoBehaviour
     [SerializeField] private float airmultiplier;
     bool readytojump = true;
     [Header("Slope Handling")]
-    [SerializeField] private float slopeJumpMultiplier;
+    [SerializeField] private float slopeSpeedMultiplier;
     [SerializeField] private float maxSlopeAngle;
     [SerializeField] private RaycastHit slopeHit;
 
@@ -83,8 +83,6 @@ public class Player_Movement : MonoBehaviour
         if(readytojump&&OnSlope()&&(Input.GetKey(jumpKey)||(Input.GetKey(jumpKey)&&Input.GetKey(crouchKey)))&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey)))
         {
             //Debug.Log("PureSlopeJump");
-            //EscapeSlope();
-            EscapeSlope();
             Jump();
             readytojump = false;
             Invoke(nameof(ResetJump), jumpcooldown);
@@ -115,10 +113,6 @@ public class Player_Movement : MonoBehaviour
         }
         */
     }
-    private void EscapeSlope()
-    {
-        rb.AddForce(transform.up*slopeJumpMultiplier, ForceMode.Impulse);
-    }
 
     private void MovePlayer()
     {
@@ -126,6 +120,10 @@ public class Player_Movement : MonoBehaviour
         if(OnSlope()){
             Debug.Log("On Slope");
             rb.AddForce(GetSlopeDirection()*sprintMultiplier*moveSpeed*10f, ForceMode.Force);
+
+            if(rb.velocity.y>0){
+                rb.AddForce(Vector3.down * 5.0f, ForceMode.Force);
+            }
             
         }  
         if(grounded){
@@ -170,7 +168,7 @@ public class Player_Movement : MonoBehaviour
     {
         if(OnSlope()){
             if(rb.velocity.magnitude>moveSpeed){
-                rb.velocity = rb.velocity.normalized*moveSpeed;
+                rb.velocity = rb.velocity.normalized*moveSpeed*slopeSpeedMultiplier;
             }
         }
         else{
