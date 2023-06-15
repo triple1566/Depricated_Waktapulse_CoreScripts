@@ -9,11 +9,14 @@ public class GunfireBasic : MonoBehaviour
 {
 
     [SerializeField] private LayerMask enemy;
+
+    [SerializeField] private LayerMask obstacle;
     [SerializeField] private float MaxHitDistance;
     [SerializeField] private float fireRateCooltime;
     public KeyCode WeaponFireKey = KeyCode.Mouse0;
     public Transform rayOrientation;
     private bool hit;
+    private bool obstacleHit;
     private bool readyToFire;
 
 
@@ -31,7 +34,12 @@ public class GunfireBasic : MonoBehaviour
     private void Update()
     {
         hit = Physics.Raycast(transform.position, rayOrientation.TransformDirection(Vector3.forward), MaxHitDistance, enemy);
+        obstacleHit = Physics.Raycast(transform.position, rayOrientation.TransformDirection(Vector3.forward), MaxHitDistance, obstacle);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward)*MaxHitDistance, Color.red);
+
+        if(obstacleHit){
+            return;
+        }
 
         if(readyToFire&&Input.GetKey(WeaponFireKey)){
             if(hit){
