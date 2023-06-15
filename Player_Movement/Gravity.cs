@@ -1,3 +1,5 @@
+//This script adds custom gravitational force to the object
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

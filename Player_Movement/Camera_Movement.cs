@@ -1,3 +1,4 @@
+// This script manages Camera movement
 
 using System;
 using System.Collections;

@@ -1,3 +1,5 @@
+//This script manages player movement (sprint, jump, WASD movement)
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

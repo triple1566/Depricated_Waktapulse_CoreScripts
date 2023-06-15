@@ -1,9 +1,8 @@
+//This script manages gunfire based on raycast.
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-//TODO: make the gun aim where crosshair is aiming at
-//      make the gun fire
 
 public class GunfireBasic : MonoBehaviour
 {
