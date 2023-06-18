@@ -162,15 +162,15 @@ public class Player_Movement : MonoBehaviour
         MyInput();
 
         if ((OnSlope()||grounded)&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey))){
-            Debug.Log("grounded");
+            //Debug.Log("grounded");
             rb.drag = groundDrag;
         }
         else if(OnSlope()||grounded){
-            Debug.Log("grounded");
+            //Debug.Log("grounded");
             rb.drag = slideDrag;
         }
         else{
-            Debug.Log("Drag is 0");
+            //Debug.Log("Drag is 0");
             rb.drag = 0;
         }
     }
