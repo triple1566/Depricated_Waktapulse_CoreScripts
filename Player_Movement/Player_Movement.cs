@@ -40,7 +40,8 @@ public class Player_Movement : MonoBehaviour
     [SerializeField] private float airmultiplier;
     bool readytojump = true;
     [Header("Slope Handling")]
-    [SerializeField] private float slopeSpeedMultiplier;
+    [SerializeField] private float slopeSpeedVal;
+    private float slopeSpeedMultiplier;
     [SerializeField] private float maxSlopeAngle;
     [SerializeField] private RaycastHit slopeHit;
 
@@ -121,10 +122,11 @@ public class Player_Movement : MonoBehaviour
         moveDirection = orientation.forward*vertInput+orientation.right*horInput;
         if(OnSlope()){
             Debug.Log("On Slope");
-            rb.AddForce(GetSlopeDirection()*sprintMultiplier*moveSpeed*10f, ForceMode.Force);
+            Debug.Log(slopeSpeedMultiplier);
+            rb.AddForce(GetSlopeDirection()*sprintMultiplier*moveSpeed*slopeSpeedMultiplier*10f, ForceMode.Force);
 
             if(rb.velocity.y>0){
-                rb.AddForce(Vector3.down * 5.0f, ForceMode.Force);
+                rb.AddForce(Vector3.down * 50.0f, ForceMode.Force);
             }
             
         }  
@@ -138,7 +140,17 @@ public class Player_Movement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        Debug.Log(jumpforce);
+        //Debug.Log(jumpforce);
+        Debug.Log(rb.velocity);
+        if(OnSlope()){
+            slopeSpeedMultiplier = slopeSpeedVal;
+            gameObject.GetComponent<Gravity>().enabled = false;
+        }
+        else{
+            slopeSpeedMultiplier = 1.0f;
+            gameObject.GetComponent<Gravity>().enabled = true;
+        }
+
         if(Input.GetKey(SprintKey)){
             sprintMultiplier = sprintVal;
         }
@@ -162,7 +174,7 @@ public class Player_Movement : MonoBehaviour
             rb.drag = 0;
         }
     }
-    private void FixedUpdate() 
+    private void FixedUpdate()
     {
         MovePlayer();
     }
@@ -170,7 +182,7 @@ public class Player_Movement : MonoBehaviour
     {
         if(OnSlope()){
             if(rb.velocity.magnitude>moveSpeed){
-                rb.velocity = rb.velocity.normalized*moveSpeed*slopeSpeedMultiplier;
+                rb.velocity = rb.velocity.normalized*moveSpeed;
             }
         }
         else{
@@ -215,7 +227,3 @@ public class Player_Movement : MonoBehaviour
         crouched = false;
     }*/
 }
-
-
-
-//ToDO: Fix Bumping up and down when moving on a slope
