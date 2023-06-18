@@ -141,7 +141,7 @@ public class Player_Movement : MonoBehaviour
     private void Update()
     {
         //Debug.Log(jumpforce);
-        Debug.Log(rb.velocity);
+        //Debug.Log(rb.velocity);
         if(OnSlope()){
             slopeSpeedMultiplier = slopeSpeedVal;
             gameObject.GetComponent<Gravity>().enabled = false;
