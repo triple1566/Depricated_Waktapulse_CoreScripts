@@ -85,12 +85,14 @@ public class Player_Movement : MonoBehaviour
         vertInput = Input.GetAxisRaw("Vertical");
         if(readytojump&&OnSlope()&&(Input.GetKey(jumpKey)||(Input.GetKey(jumpKey)&&Input.GetKey(crouchKey)))&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey)))
         {
+            //Debug.Log("PureSlopeJump");
             Jump();
             readytojump = false;
             Invoke(nameof(ResetJump), jumpcooldown);
         }
         else if(readytojump&&grounded&&(Input.GetKey(jumpKey)||(Input.GetKey(jumpKey)&&Input.GetKey(crouchKey)))&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey)))
         {
+            //Debug.Log("PureGroundJump");
             Jump();
             Jump();
             readytojump = false;
@@ -120,12 +122,11 @@ public class Player_Movement : MonoBehaviour
         moveDirection = orientation.forward*vertInput+orientation.right*horInput;
         if(OnSlope()){
             Debug.Log("On Slope");
-            //Debug.Log(slopeSpeedMultiplier);
+            Debug.Log(slopeSpeedMultiplier);
             rb.AddForce(GetSlopeDirection()*sprintMultiplier*moveSpeed*slopeSpeedMultiplier*10f, ForceMode.Force);
 
             if(rb.velocity.y>0){
-                rb.AddForce(-Vector3.up * 50.0f, ForceMode.Force);
-                Debug.Log("DownForce Applied");
+                rb.AddForce(Vector3.down * 50.0f, ForceMode.Force);
             }
             
         }  
@@ -136,8 +137,11 @@ public class Player_Movement : MonoBehaviour
             rb.AddForce(moveDirection.normalized*sprintMultiplier*moveSpeed*10f*airmultiplier, ForceMode.Force);
     }
 
-    private void FixedUpdate()
+    // Update is called once per frame
+    private void Update()
     {
+        //Debug.Log(jumpforce);
+        //Debug.Log(rb.velocity);
         if(OnSlope()){
             slopeSpeedMultiplier = slopeSpeedVal;
             gameObject.GetComponent<Gravity>().enabled = false;
@@ -146,28 +150,32 @@ public class Player_Movement : MonoBehaviour
             slopeSpeedMultiplier = 1.0f;
             gameObject.GetComponent<Gravity>().enabled = true;
         }
+
         if(Input.GetKey(SprintKey)){
             sprintMultiplier = sprintVal;
         }
         else
             sprintMultiplier = 1.0f;
-        Debug.Log(readytojump);
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight+0.1f, ground);
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down)*playerHeight, Color.green);
+        //Debug.Log(readytojump);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight+0.01f, ground);
+        //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down)*playerHeight, Color.green);
         MyInput();
 
         if ((OnSlope()||grounded)&&!(Input.GetKey(forwardKey)||Input.GetKey(backwardKey)||Input.GetKey(leftKey)||Input.GetKey(rightKey))){
-            Debug.Log("grounded");
+            //Debug.Log("grounded");
             rb.drag = groundDrag;
         }
         else if(OnSlope()||grounded){
-            Debug.Log("grounded");
+            //Debug.Log("grounded");
             rb.drag = slideDrag;
         }
         else{
-            Debug.Log("Drag is 0");
+            //Debug.Log("Drag is 0");
             rb.drag = 0;
         }
+    }
+    private void FixedUpdate()
+    {
         MovePlayer();
     }
     private void SpeedControl()
