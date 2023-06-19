@@ -13,7 +13,6 @@ public class Camera_Movement : MonoBehaviour
     public float sens_y = 500;
 
     [SerializeField] private Transform orientation;
-    [SerializeField] private Camera MainCamera;
 
     private float xRot;
     private float yRot;
@@ -23,8 +22,6 @@ public class Camera_Movement : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        MainCamera.pixelRect = new Rect(0,0,1920,1080);
     }
 
     // Update is called once per frames
