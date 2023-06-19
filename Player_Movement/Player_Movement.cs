@@ -138,7 +138,17 @@ public class Player_Movement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        Debug.Log(jumpforce);
+        //Debug.Log(jumpforce);
+        //Debug.Log(rb.velocity);
+        if(OnSlope()){
+            slopeSpeedMultiplier = slopeSpeedVal;
+            gameObject.GetComponent<Gravity>().enabled = false;
+        }
+        else{
+            slopeSpeedMultiplier = 1.0f;
+            gameObject.GetComponent<Gravity>().enabled = true;
+        }
+
         if(Input.GetKey(SprintKey)){
             sprintMultiplier = sprintVal;
         }
