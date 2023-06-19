@@ -22,7 +22,7 @@ public class Gravity : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
+    private void Update()
     {
         //Debug.Log(playerVelocity.y);
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight+0.2f, ground);
@@ -34,9 +34,10 @@ public class Gravity : MonoBehaviour
         }
         else
         {
-            playerVelocity.y+=downForce*0.1f;
+            playerVelocity.y+=downForce/1000;
         }
-        rb.AddForce(-transform.up.normalized*playerVelocity.y, ForceMode.Impulse);
+        rb.AddForce(-transform.up*playerVelocity.y, ForceMode.Impulse);
         //중력에 따라 아래로 움직이기
+
     }
 }
