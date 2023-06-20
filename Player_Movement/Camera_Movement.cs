@@ -9,8 +9,8 @@ public class Camera_Movement : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public float sens_x = 500;
-    public float sens_y = 500;
+    public float sens_x = 200;
+    public float sens_y = 200;
 
     [SerializeField] private Transform orientation;
 
