@@ -25,7 +25,7 @@ public class Gravity : MonoBehaviour
     private void FixedUpdate()
     {
         //Debug.Log(playerVelocity.y);
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight+0.1f, ground);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight+0.05f, ground);
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down)*(playerHeight+0.3f), Color.green);
     
         if(grounded){

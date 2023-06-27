@@ -8,11 +8,14 @@ using UnityEngine;
 public class Camera_Movement : MonoBehaviour
 {
     // Start is called before the first frame update
-
-    public float sens_x = 200;
-    public float sens_y = 200;
+    [SerializeField] private float sens_x = 400;
+    [SerializeField] private float sens_y = 400;
 
     [SerializeField] private Transform orientation;
+
+    Vector3 currentEulerAngles;
+
+    Vector3 currentPlayerEulerAngles;
 
     private float xRot;
     private float yRot;
@@ -36,7 +39,11 @@ public class Camera_Movement : MonoBehaviour
 
         xRot = Mathf.Clamp(xRot, -90f, 90f);
 
-        transform.rotation = Quaternion.Euler(xRot, yRot, 0);
-        orientation.rotation = Quaternion.Euler(0, yRot, 0);
+        currentEulerAngles = new Vector3(xRot, 0, 0);
+        currentPlayerEulerAngles = new Vector3(0, yRot, 0);
+
+
+        transform.localEulerAngles = currentEulerAngles;
+        orientation.localEulerAngles = currentPlayerEulerAngles;
     }
 }
