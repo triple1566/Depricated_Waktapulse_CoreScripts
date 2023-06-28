@@ -72,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(moveDirection.normalized*moveSpeed*10f,ForceMode.Force);
     }
     private void DragManager(){
-        onGround = Physics.Raycast(transform.position, Vector3.down, playerHeight+0.1f, ground);
+        onGround = Physics.Raycast(transform.position, Vector3.down, playerHeight+0.05f, ground);
         if(onGround){
             drag = groundDrag;
         }
