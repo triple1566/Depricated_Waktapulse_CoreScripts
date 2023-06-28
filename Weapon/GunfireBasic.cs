@@ -32,8 +32,10 @@ public class GunfireBasic : MonoBehaviour
 
     private void Update()
     {
-        hit = Physics.Raycast(transform.position, rayOrientation.TransformDirection(Vector3.forward), MaxHitDistance, enemy);
         obstacleHit = Physics.Raycast(transform.position, rayOrientation.TransformDirection(Vector3.forward), MaxHitDistance, obstacle);
+        
+        hit = Physics.Raycast(transform.position, rayOrientation.TransformDirection(Vector3.forward), MaxHitDistance, enemy);
+        
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward)*MaxHitDistance, Color.red);
 
         if(obstacleHit){
